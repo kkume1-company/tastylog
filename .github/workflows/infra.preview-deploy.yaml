@@ -22,11 +22,11 @@ env:
 defaults:
   run:
     shell: bash
-    working-directory: "10_infra"
+    working-directory: "10_infra/"
 
 jobs:
   preview:
-    name: "Preview"
+    name: Preview
     runs-on: ubuntu-latest
     outputs:
       TF_PLAN_EXITCODE: ${{ steps.plan.outputs.exitcode }}
@@ -95,7 +95,7 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
   deploy:
-    name: "Deploy"
+    name: Deploy
     needs: preview
     if: needs.preview.outputs.TF_PLAN_EXITCODE == 2
     environment: production
@@ -107,7 +107,6 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TF_VERSION }}
-          terraform_wrapper: false
       - name: terraform fmt
         run: |
           terraform fmt --check
