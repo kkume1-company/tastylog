@@ -67,7 +67,7 @@ jobs:
       - name: debug
         run: echo ${{ steps.plan.outputs.exitcode }}
       - name: Slack Notify
-        # if: steps.plan.outputs.exitcode == 2
+        if: steps.plan.outputs.exitcode == 2
         uses: slackapi/slack-github-action@v1.22.0
         with:
           channel-id: "${{ secrets.SLACK_CHANNEL_ID }}"
@@ -121,3 +121,13 @@ jobs:
       - name: Terraform init
         run: |
           terraform init -no-color
+      - name: Terraform apply
+        run: |
+          terraform apply \
+            -var 'project=${{ env.TF_PROJECT }}' \
+            -var 'environment=${{ env.TF_ENVIRONMENT }}' \
+            -var 'username=${{ secrets.MYSQL_USERNAME }}' \
+            -var 'password=${{ secrets.MYSQL_PASSWORD }}' \
+            -input=false \
+            -no-color \
+            -auto-approve
