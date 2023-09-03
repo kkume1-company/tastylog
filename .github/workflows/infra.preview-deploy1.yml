@@ -27,7 +27,6 @@ defaults:
 jobs:
   preview:
     name: Preview
-    continue-on-error: true
     runs-on: ubuntu-latest
     outputs:
       TF_PLAN_EXITCODE: ${{ steps.plan.outputs.exitcode }}
